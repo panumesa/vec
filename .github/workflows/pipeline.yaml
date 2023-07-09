@@ -1,0 +1,22 @@
+name: CI
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: alexxlalex/yashka:latest
+    steps:
+      - name: clone
+        uses: actions/checkout@v1
+      - name: add build folder
+        run: mkdir -p build
+      - name: build
+        working-directory: ./build
+        run: cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release -DENABLE_TEST=on -G "Ninja" -S .. -B . && cmake --build .
+      - name: tests
+        working-directory: ./build
+        run: ctest
+      - name: run lint
+        run: echo "$(cpplint --recursive --exclude=build/* --output=emacs . > analyze.txt 2> analyze.txt)"
+      - name: show lint analyze
+        run: echo "$(cat analyze.txt)"

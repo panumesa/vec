@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.21)
+project(vec LANGUAGES CXX VERSION 0.0.0)
+#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -fconcepts)
+set(CMAKE_CXX_STANDARD 23)
+include_directories(include src)
+add_subdirectory(examples)
+add_subdirectory(test)
