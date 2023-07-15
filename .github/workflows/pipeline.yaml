@@ -14,7 +14,7 @@ jobs:
         working-directory: ./build
         run: cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release -DENABLE_TEST=on -G "Ninja" -S .. -B . && cmake --build .
       - name: tests
-        working-directory: ./build
+        working-directory: ./build/test
         run: ctest
       - name: run lint
         run: echo "$(cpplint --recursive --exclude=build/* --output=emacs . > analyze.txt 2> analyze.txt)"
