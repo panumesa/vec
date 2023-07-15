@@ -1,6 +1,2 @@
-BasedOnStyle: Google---
-Language: CppAllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: falseAllowShortLambdasOnASingleLine: Empty
-DerivePointerAlignment: falsePointerAlignment: Left
-SortIncludes: falsePackConstructorInitializers: Never
-BreakConstructorInitializers: BeforeColonBreakInheritanceList: AfterComma
+BasedOnStyle: Google
+Language: Cpp

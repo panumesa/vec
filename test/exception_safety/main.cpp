@@ -3,11 +3,11 @@
 
 #include "gtest/gtest.h"
 #include "utils /none_default_constructible.h"
+#include "utils /throwing_default_constructor.h"
 #include "vec.h"
-TEST(SACCESS, TEST1) {
-  vec<int> a;
-  a.push_back(1);
-  EXPECT_EQ(a[0], 1);
+TEST(ITERATOR, TEST1) {
+  EXPECT_THROW(std::vector<throwing_default_constructor> v(2);
+               , std::runtime_error);
 }
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);

@@ -1,4 +1,5 @@
-.idea/.vs/
+.idea/
+.vs/
 cmake-build-debug/cmake-build-release/
 cmake-*build/
 
@@ -9,17 +10,24 @@ docs/xml/docs/Doxyfile
 
 
 # Compiled Object files
-*.slo*.lo
-*.o*.obj
+*.slo
+*.lo
+*.o
+*.obj
 # Precompiled Headers
 *.gch
 *.pch
 # Compiled Dynamic libraries*.so
-*.dylib*.dll
+*.dylib
+*.dll
 # Fortran module files
-*.mod*.smod
+*.mod
+*.smod
 # Compiled Static libraries
-*.lai*.la
-*.a*.lib
+*.lai
+*.la
+*.a
+*.lib
 # Executables
-*.exe*.app
+*.exe
+*.app
