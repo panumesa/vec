@@ -59,9 +59,10 @@ template <vector_element T, typename Allocator>
 template <typename... args>
 constexpr void vec<T,Allocator>::emplace_back(args&&... pack){
   if (sz == cap) {
-     T* mem = resize_alloc(std::max(2 * cap, static_cast<size_t>(1)));
+     size_t new_cap = std::max(2 * cap, static_cast<size_t>(1));
+     T* mem = resize_alloc(new_cap);
      std::allocator_traits<Allocator>::construct(allocator, mem + sz, std::forward<args&&...>(pack)...);
-     resize_dealloc(mem,2*cap);
+     resize_dealloc(mem,new_cap);
      sz++;
      return;
   }
