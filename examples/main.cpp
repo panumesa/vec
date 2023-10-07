@@ -1,19 +1,25 @@
 #include <iostream>
 #include <set>
+#include <queue>
 #include "vec.h"
+#include <algorithm>
 int main() {
-  vec<int> brr = {1,2,3,4,5};
-  std::set<int> s = {7,6,5,1,2,3,4};
-  vec<int> crr(s.crbegin(), s.crend());
-//  for (int i = 0; i < 5; ++i) {
-//    std::cout << brr[i] << ' ';
-//  }
-  for (int i = 0; i < crr.size(); ++i) {
-    std::cout << crr[i] << ' ';
+  vec<int> a = {1,2,3,4,5,6};
+  vec<int> b;
+  vec<int> c = {5,2,1,3,4};
+//  std::priority_queue<int, vec<int>> q(a.cbegin(),a.cend());
+//  while(!q.empty()){
+//    std::cout << q.top() << ' ';
+//    q.pop();
+//  } TODO
+//  std::transform(a.cbegin(),a.cend(), std::back_inserter(b),[](const int x){return -x*x;});
+  b.resize(a.size());
+  std::transform(a.cbegin(),a.cend(), b.begin(),[](const int x){return -x*x;});
+  b.push_back(3);
+  std::sort(b.rbegin(),b.rend(),std::less<int>());
+  for (auto it : b) {
+    std::cout << it << ' ';
   }
-  for (int i = 0; i < 5; ++i) {
-    brr.pop_back();
-  }
-
   return 0;
 }
+//TODO std::span std::ranges std::reduce std::merge ,,, std::priority_queue

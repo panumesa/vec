@@ -1,6 +1,7 @@
 #ifndef VEC_VEC_H
 #define VEC_VEC_H
 #include "vec-forward.h"
+#include "iterator/iterator.h"
 template <vector_element T, typename Allocator>
 vec<T, Allocator>::~vec() {
   if (arr != nullptr) allocator.deallocate(arr, cap);
@@ -16,6 +17,7 @@ constexpr void vec<T, Allocator>::push_back(T&& item) {
 template <vector_element T, typename Allocator>
 constexpr void vec<T, Allocator>::resize(size_t new_cap) {
     resize_dealloc(resize_alloc(new_cap), new_cap);
+    sz = new_cap;
 }
 template <vector_element T, typename Allocator>
 constexpr T* vec<T, Allocator>::resize_alloc(size_t new_cap){
@@ -44,7 +46,7 @@ constexpr void vec<T, Allocator>::resize_dealloc(T* new_arr,size_t new_cap){
 template <vector_element T, typename Allocator>
 constexpr void vec<T, Allocator>::pop_back() {
   if (sz == 0) return;
-  if (sz > 0) --sz;
+  sz--;
   if (4 * sz < cap) resize((cap + 1) / 2);
 }
 template <vector_element T, typename Allocator>
@@ -153,6 +155,74 @@ sz(std::distance(begin,end)), cap(0), allocator(alloc), arr(std::allocator_trait
 template <vector_element T, typename Allocator>
 constexpr size_t vec<T,Allocator>::size() const noexcept{
     return sz;
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::iterator vec<T,Allocator>::begin() noexcept{
+    return iterator(arr);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_iterator vec<T,Allocator>::begin() const noexcept{
+    return const_iterator(arr);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_iterator vec<T,Allocator>::cbegin() const noexcept{
+    return const_iterator(arr);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::reverse_iterator vec<T,Allocator>::rbegin() noexcept{
+    return reverse_iterator(arr + sz - 1);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_reverse_iterator vec<T,Allocator>::rbegin() const noexcept{
+    return const_reverse_iterator(arr + sz - 1);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_reverse_iterator vec<T,Allocator>::crbegin() const noexcept{
+    return const_reverse_iterator(arr + sz - 1);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::iterator vec<T,Allocator>::end() noexcept{
+    return iterator(arr + sz);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_iterator vec<T,Allocator>::end() const noexcept{
+    return const_iterator(arr + sz);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_iterator vec<T,Allocator>::cend() const noexcept{
+    return const_iterator(arr + sz);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::reverse_iterator vec<T,Allocator>::rend() noexcept{
+    return reverse_iterator(arr-1);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_reverse_iterator vec<T,Allocator>::rend() const noexcept{
+    return const_reverse_iterator(arr-1);
+}
+template <vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::const_reverse_iterator vec<T,Allocator>::crend() const noexcept{
+    return const_reverse_iterator(arr-1);
+}
+template <vector_element T, typename Allocator>
+constexpr T* vec<T,Allocator>::data() noexcept{
+    return arr;
+}
+template <vector_element T, typename Allocator>
+constexpr const T* vec<T,Allocator>::data() const noexcept{
+    return arr;
+}
+template <vector_element T, typename Allocator>
+constexpr bool vec<T,Allocator>::empty() const noexcept{
+    return sz == 0;
+}
+template <vector_element T, typename Allocator>
+constexpr T& vec<T,Allocator>::front() noexcept{
+    return arr[0];
+}
+template <vector_element T, typename Allocator>
+constexpr const T& vec<T,Allocator>::front() const noexcept{
+    return arr[0];
 }
 // std::set<int> s = {2,3,1}; std::vector<int> v(s.begin(), s.end());
 #endif  // VEC_VEC_H

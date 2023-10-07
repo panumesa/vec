@@ -1,7 +1,9 @@
 .idea/
 .vs/
-cmake-build-debug/cmake-build-release/
-cmake-*build/
+cmake-build-debug/
+cmake-build-release/
+cmake-*
+build/
 
 docs/docbook/
 docs/html/docs/latex/
