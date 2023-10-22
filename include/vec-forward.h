@@ -62,6 +62,8 @@ class vec {
   [[nodiscard]] constexpr bool empty() const noexcept;
   [[nodiscard]] constexpr T& front() noexcept;
   [[nodiscard]] constexpr const T& front() const noexcept;
+  template< class InputIt >
+  constexpr iterator insert( const_iterator pos, InputIt first, InputIt last);
 
  private:
   size_t sz = 0;
@@ -72,5 +74,7 @@ class vec {
   constexpr void copy_swap(vec<T,Allocator>& other) noexcept;
   constexpr T* resize_alloc(size_t new_cap);
   constexpr void resize_dealloc(T* new_arr, size_t new_cap);
+  constexpr void shrink(size_t new_cap);
+  constexpr void shift_right_suffix(size_t begin, size_t len_of_shift);
 };
 #endif  // VEC_VEC_FORWARD_H

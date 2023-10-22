@@ -2,9 +2,11 @@
 #define VEC_VEC_H
 #include "vec-forward.h"
 #include "iterator/iterator.h"
+#include "cassert"
 template <vector_element T, typename Allocator>
 vec<T, Allocator>::~vec() {
   if (arr != nullptr) allocator.deallocate(arr, cap);
+  sz = cap = 0;
 }
 template <vector_element T, typename Allocator>
 constexpr void vec<T, Allocator>::push_back(const T& item) {
@@ -35,7 +37,7 @@ constexpr void vec<T, Allocator>::resize_dealloc(T* new_arr,size_t new_cap){
     catch(...){
         std::allocator_traits<Allocator>::deallocate(allocator,arr, cap);
         std::allocator_traits<Allocator>::deallocate(allocator, new_arr, new_cap);
-        throw std::current_exception();
+        throw std::runtime_error("123");
     }
     if(cap != 0) std::allocator_traits<Allocator>::deallocate(allocator,arr, cap);
     arr = new_arr;
@@ -47,7 +49,7 @@ template <vector_element T, typename Allocator>
 constexpr void vec<T, Allocator>::pop_back() {
   if (sz == 0) return;
   sz--;
-  if (4 * sz < cap) resize((cap + 1) / 2);
+  if (4 * sz < cap) shrink((cap + 1) / 2);
 }
 template <vector_element T, typename Allocator>
 constexpr T& vec<T, Allocator>::operator[](size_t index) {
@@ -223,6 +225,64 @@ constexpr T& vec<T,Allocator>::front() noexcept{
 template <vector_element T, typename Allocator>
 constexpr const T& vec<T,Allocator>::front() const noexcept{
     return arr[0];
+}
+template <vector_element T, typename Allocator>
+constexpr void vec<T,Allocator>::shrink(size_t new_cap){
+    assert(sz <= new_cap && new_cap < cap);
+    T* newarr = std::allocator_traits<Allocator>::allocate(allocator, new_cap);
+    for (int i = 0; i < sz; ++i) {
+        try {
+            std::allocator_traits<Allocator>::construct(allocator, newarr + i, std::move_if_noexcept(arr[i]));
+        }catch(...){
+            std::allocator_traits<Allocator>::deallocate(allocator, newarr,new_cap);
+            std::allocator_traits<Allocator>::deallocate(allocator,arr,cap);
+            sz = cap = 0;
+            throw std::runtime_error("ne constructed \n");
+        }
+    }
+    std::allocator_traits<Allocator>::deallocate(allocator,arr,cap);
+    arr = newarr;
+    cap = new_cap;
+}
+template<vector_element T, typename Allocator>
+template<typename InputIt>
+constexpr typename vec<T,Allocator>::iterator vec<T,Allocator>::insert( typename vec<T,Allocator>::const_iterator pos, InputIt first, InputIt last){
+    size_t len_of_gap = std::distance(first, last);
+    size_t start = pos - cbegin();
+    if(sz + len_of_gap <= cap){
+        shift_right_suffix(start, len_of_gap);
+        for (int i = start; i < start + len_of_gap ; ++i) {
+            std::allocator_traits<Allocator>::construct(allocator,arr + i, *(first++));
+        }
+    }else{//TODO TRY KECH
+        T* newarr = std::allocator_traits<Allocator>::allocate(allocator,sz + len_of_gap);
+        for (int i = 0; i < start; ++i) {
+            std::allocator_traits<Allocator>::construct(allocator,newarr + i, std::move_if_noexcept(arr[i]));
+        }
+        for (int i = start; i < start + len_of_gap ; ++i) {
+            std::allocator_traits<Allocator>::construct(allocator,newarr + i, *(first++));
+        }
+        for (int i = start; i < sz  ; ++i) {
+            std::allocator_traits<Allocator>::construct(allocator,newarr + i + len_of_gap, std::move_if_noexcept(arr[i]));
+        }
+        std::allocator_traits<Allocator>::deallocate(allocator,arr,cap);
+        arr = newarr;
+        cap = sz + len_of_gap;
+    }
+    sz += len_of_gap;
+    return begin() + start + len_of_gap;
+}
+template<vector_element T, typename Allocator>
+constexpr void vec<T,Allocator>::shift_right_suffix(size_t begin, size_t len_of_shift) {
+    assert(begin < sz && sz + len_of_shift <= cap);
+    for (int i = sz - 1; i >= begin; --i) {
+//        arr[i + len_of_shift] = arr[i];
+        try{std::allocator_traits<Allocator>::construct(allocator,arr + i + len_of_shift, std::move_if_noexcept(arr[i]));}
+        catch(...){
+            ~vec<T,Allocator>();
+            throw std::runtime_error("shift problem!\n");
+        }
+    }
 }
 // std::set<int> s = {2,3,1}; std::vector<int> v(s.begin(), s.end());
 #endif  // VEC_VEC_H
