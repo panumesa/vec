@@ -63,7 +63,7 @@ class vec {
   [[nodiscard]] constexpr T& front() noexcept;
   [[nodiscard]] constexpr const T& front() const noexcept;
   template< class InputIt >
-  constexpr iterator insert( const_iterator pos, InputIt first, InputIt last);
+  constexpr iterator insert(iterator pos, InputIt first, InputIt last);
 
  private:
   size_t sz = 0;

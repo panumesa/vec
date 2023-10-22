@@ -246,7 +246,7 @@ constexpr void vec<T,Allocator>::shrink(size_t new_cap){
 }
 template<vector_element T, typename Allocator>
 template<typename InputIt>
-constexpr typename vec<T,Allocator>::iterator vec<T,Allocator>::insert( typename vec<T,Allocator>::const_iterator pos, InputIt first, InputIt last){
+constexpr typename vec<T,Allocator>::iterator vec<T,Allocator>::insert( typename vec<T,Allocator>::iterator pos, InputIt first, InputIt last){
     size_t len_of_gap = std::distance(first, last);
     size_t start = pos - cbegin();
     if(sz + len_of_gap <= cap){
