@@ -284,5 +284,29 @@ constexpr void vec<T,Allocator>::shift_right_suffix(size_t begin, size_t len_of_
         }
     }
 }
+template<vector_element T, typename Allocator>
+constexpr typename vec<T,Allocator>::iterator vec<T,Allocator>::erase(const_iterator first, const_iterator last){
+    if(first >= last){
+        return iterator(&const_cast<T&>((*last)));
+    }
+    std::ptrdiff_t first_index = first - cbegin();
+    std::ptrdiff_t last_index = last - cbegin();
+    std::ptrdiff_t shift = last_index - first_index;
+    assert(first_index >= 0 && last_index <= sz);
+    for (std::ptrdiff_t i = last_index; i < sz; ++i) {
+        std::allocator_traits<Allocator>::construct(allocator,arr + i - shift, std::move_if_noexcept(arr[i]));//TODO try catch
+    }
+    sz-=shift;
+    if(4*sz < cap) shrink((cap + 1)/2);
+    return iterator{arr + std::min(sz,static_cast<size_t>(last_index))};
+}
+template<vector_element T, typename Allocator>
+constexpr size_t vec<T, Allocator>::capacity() const noexcept {
+    return cap;
+}
+template<vector_element T, typename Allocator>
+constexpr typename vec<T, Allocator>::reference vec<T, Allocator>::back() {
+    return arr[sz-1];
+}
 // std::set<int> s = {2,3,1}; std::vector<int> v(s.begin(), s.end());
 #endif  // VEC_VEC_H

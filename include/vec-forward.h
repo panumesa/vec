@@ -3,14 +3,8 @@
 #include "internal/define.h"
 #include "iterator/iterator-forward.h"
 #include <memory>
-
- template<class T>
- concept CopyAssignable = std::is_copy_assignable_v<T>;
- template<class T>
- concept CopyConstructible = std::is_copy_constructible_v<T>;
- template<class T>
- concept vector_element = CopyAssignable<T> && CopyConstructible<T>;
- template <vector_element T, typename Allocator = std::allocator<T>>
+#include "internal/concepts.h"
+template <vector_element T, typename Allocator = std::allocator<T>>
 class vec {
  public:
     using value_type = T;
@@ -37,6 +31,7 @@ class vec {
   vec<T,Allocator>& operator=(vec<T,Allocator>&& copy);
   constexpr void swap(vec<T,Allocator>& second) noexcept;
   constexpr void push_back(const T& item);
+  constexpr reference back();
   constexpr void pop_back();
   constexpr void resize(size_t new_cap);
   [[nodiscard]] constexpr T& operator[](size_t index);
@@ -45,6 +40,7 @@ class vec {
   constexpr void emplace_back(args&&... pack);
   constexpr void push_back(T&& item);
   constexpr size_t size() const noexcept;
+  constexpr size_t capacity() const noexcept;
   [[nodiscard]] constexpr iterator begin() noexcept;
   [[nodiscard]] constexpr const_iterator begin() const noexcept;
   [[nodiscard]] constexpr const_iterator cbegin() const noexcept;
@@ -64,6 +60,7 @@ class vec {
   [[nodiscard]] constexpr const T& front() const noexcept;
   template< class InputIt >
   constexpr iterator insert(iterator pos, InputIt first, InputIt last);
+  constexpr iterator erase(const_iterator first, const_iterator last);
 
  private:
   size_t sz = 0;

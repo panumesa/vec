@@ -2,10 +2,37 @@
 #include <set>
 #include <queue>
 #include "vec.h"
+#include "stack.h"
 #include <ranges>
+#include <list>
+#include <deque>
 #include <algorithm>
+void example_erase(){
+  vec<int> a = {1,2,3,4,5,6,7,8};
+  a.erase(a.cbegin() + 1 , a.cend());
+  for (auto x: a) {
+      std::cout << x << ' ';
+  }
+  std::cout << std::endl << a.capacity() << std::endl ;
+}
+void example_stack(){
+  stack<int, vec<int>> a;
+  a.push(1);
+  a.push(2);
+  a.push(3);
+  a.push(4);
+  for (int i = 0; i < 4; ++i) {
+    std::cout << a.top() << ' ';
+    a.pop();
+  }
+  std::cout << std::endl;
+
+}
 int main() {
-  vec<int> a = {1,2,3,4,5,6};
+  example_erase();
+  example_stack();
+
+  /*vec<int> a = {1,2,3,4,5,6};
   vec<int> b;
   vec<int> c = {5,2,1,3,4};
   std::priority_queue<int, vec<int>> q(a.cbegin(),a.cend());
@@ -33,5 +60,6 @@ int main() {
     std::cout << it << ' ';
   }
   return 0;
+   */
 }
 //TODO std::span std::ranges std::reduce std::merge ,,, std::priority_queue
