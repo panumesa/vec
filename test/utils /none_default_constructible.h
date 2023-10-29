@@ -8,8 +8,9 @@
 
 class none_default_constructible {
     none_default_constructible() = delete;
+
 public:
-    none_default_constructible(int x){};
+    none_default_constructible(int x) {};
 };
 
 

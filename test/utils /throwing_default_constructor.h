@@ -10,7 +10,7 @@
 
 class throwing_default_constructor {
 public:
-    throwing_default_constructor(){
+    throwing_default_constructor() {
         throw std::runtime_error("m");
     }
 };

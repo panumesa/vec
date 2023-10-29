@@ -1,10 +1,11 @@
 #ifndef VEC_STACK_H
 #define VEC_STACK_H
+
 #include "stack-forward.h"
 
 
 template<typename T, stack_compatible_container<T> Container>
-constexpr void stack<T, Container>::swap(stack<T, Container> &other) noexcept{
+constexpr void stack<T, Container>::swap(stack<T, Container> &other) noexcept {
     c.swap(other.c);
 }
 
@@ -30,12 +31,12 @@ constexpr bool stack<T, Container>::empty() const {
 }
 
 template<typename T, stack_compatible_container<T> Container>
-constexpr typename stack<T,Container>::reference stack<T, Container>::top() {
+constexpr typename stack<T, Container>::reference stack<T, Container>::top() {
     return c.back();
 }
 
 template<typename T, stack_compatible_container<T> Container>
-constexpr stack<T, Container>::stack(const Container &con): c(con){
+constexpr stack<T, Container>::stack(const Container &con): c(con) {
 
 }
 
